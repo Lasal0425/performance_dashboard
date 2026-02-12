@@ -14,8 +14,9 @@ interface DataTableProps {
 export function DataTable({ data, headers }: DataTableProps) {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(() => {
+        const pointCol = headers.find(h => h.toLowerCase().includes('point') || h.toLowerCase().includes('total'));
+        if (pointCol) return { key: pointCol, direction: 'desc' };
         if (headers.includes('Rank')) return { key: 'Rank', direction: 'asc' };
-        if (headers.includes('Total Points')) return { key: 'Total Points', direction: 'desc' };
         return null;
     });
 
