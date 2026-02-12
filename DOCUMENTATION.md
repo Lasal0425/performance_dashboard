@@ -9,13 +9,13 @@ This document provides a detailed overview of the B2B Performance Dashboard's ar
 The application is built on a **Centralized State Pattern**. The `Dashboard.tsx` component serves as the "Orchestrator," managing the lifecycle of the data from fetching to distribution.
 
 ### Data Flow:
-1.  **Input**: User provides a Google Sheets CSV URL via `UrlInput`.
+1.  **Source**: The dashboard retrieves the Google Sheets CSV URL from environment variables (`NEXT_PUBLIC_CSV_URL`) or a fallback default.
 2.  **Fetch**: `Dashboard` fetches the raw CSV text using the browser Fetch API.
-3.  **Parse**: `PapaParse` converts CSV text into a JSON array of objects.
-4.  **Auto-Detection**: The dashboard analyzes the first row of data to determine:
-    *   `labelColumn`: The first column (usually "Entity" or "Name").
-    *   `numericColumns`: Any columns containing numerical data (automatically identifies metrics).
-5.  **Distribution**: The parsed and categorized data is passed down to specialized UI components.
+3.  **Parse**: `PapaParse` converts CSV text into a JSON array of objects with `dynamicTyping` enabled.
+4.  **Auto-Detection**: The dashboard analyzes the headers and data types to determine:
+    *   `labelColumn`: The first column (Entity/Name).
+    *   `numericColumns`: Columns containing numerical metrics.
+5.  **Visualization**: Data is distributed to the **Podium**, **Leaderboard**, and **Performance Charts**.
 
 ---
 
@@ -24,9 +24,16 @@ The application is built on a **Centralized State Pattern**. The `Dashboard.tsx`
 ### `Dashboard.tsx`
 *   **Role**: Orchestrator and State Provider.
 *   **Key Logic**:
-    *   Uses `useCallback` for efficient data fetching.
-    *   Implements `dynamicTyping: true` in PapaParse to automatically distinguish numbers from strings.
-    *   Handles Loading and Error states with visual feedback.
+    *   Uses `useCallback` and `useEffect` for lifecycle management.
+    *   Automates the identification of metrics vs. labels.
+    *   Handles synchronized loading and error states.
+
+### `Podium.tsx`
+*   **Role**: Visual Highlight of Top Performers.
+*   **Logic**: 
+    *   Dynamically identifies a "Score Column" (searching for keywords like 'Total' or 'Points').
+    *   Sorts data and renders the Top 3 in a stylized Olympic-style podium.
+    *   Uses `framer-motion` style animations for entry.
 
 ### `DataTable.tsx`
 *   **Role**: Interactive Data Explorer.
