@@ -31,7 +31,7 @@ export function Dashboard() {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(url);
+            const response = await fetch(url, { cache: 'no-store' });
             if (!response.ok) throw new Error(`Failed to fetch data: ${response.statusText}`);
             const csvText = await response.text();
 
@@ -106,7 +106,7 @@ export function Dashboard() {
                         </div>
                         <div>
                             <h1 className="text-4xl font-black tracking-tight text-slate-900">
-                                 Performance Dashboard
+                                Performance Dashboard
                             </h1>
                             <p className="text-slate-500 mt-1 max-w-lg font-medium">
                                 Real-time competition tracker and entity performance analytics.
