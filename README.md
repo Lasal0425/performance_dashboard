@@ -1,4 +1,4 @@
-# B2B Performance Dashboard
+# Performance Dashboard
 
 A dynamic, real-time dashboard built with Next.js 15, React, and Recharts that fetches data directly from Google Sheets CSV.
 
